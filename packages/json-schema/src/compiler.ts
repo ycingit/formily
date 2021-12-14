@@ -16,21 +16,50 @@ import {
   patchStateFormSchema,
 } from './shared'
 import { ISchema } from './types'
+interface IObject {
+  [key: string]: any
+}
 
 const ExpRE = /^\s*\{\{([\s\S]*)\}\}\s*$/
 const Registry = {
   silent: false,
-  compile(expression: string, scope = {}) {
+  compile(expression: string, scope: IObject = {}) {
     if (Registry.silent) {
       try {
-        return new Function('$root', `with($root) { return (${expression}); }`)(
-          scope
-        )
+        let matched = expression.match(/\[(.+?)\]/g)[0].split('')
+        let matched2 = expression.match(/===(.*)$/g)[0].split('')
+        matched.shift()
+        matched.shift()
+        matched.pop()
+        matched.pop()
+        matched2.shift()
+        matched2.shift()
+        matched2.shift()
+        matched2.shift()
+        matched2.shift()
+        matched2.pop()
+        return scope.$values[matched.join('')] === matched2.join('')
+        // return new Function('$root', `with($root) { return (${expression}); }`)(
+        //   scope
+        // )
       } catch {}
     } else {
-      return new Function('$root', `with($root) { return (${expression}); }`)(
-        scope
-      )
+      let matched = expression.match(/\[(.+?)\]/g)[0].split('')
+      let matched2 = expression.match(/===(.*)$/g)[0].split('')
+      matched.shift()
+      matched.shift()
+      matched.pop()
+      matched.pop()
+      matched2.shift()
+      matched2.shift()
+      matched2.shift()
+      matched2.shift()
+      matched2.shift()
+      matched2.pop()
+      return scope.$values[matched.join('')] === matched2.join('')
+      // return new Function('$root', `with($root) { return (${expression}); }`)(
+      //   scope
+      // )
     }
   },
 }

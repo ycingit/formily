@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { untracked, autorun, observable } from '@formily/reactive'
 import {
   isArr,
@@ -121,6 +120,7 @@ const setSchemaFieldState = (
     }
     if (isStr(runner) && runner) {
       field.form.setFieldState(target, (state) => {
+        // @ts-ignore
         shallowCompile(`{{function(){${runner}}}}`, {
           ...scope,
           $target: state,
@@ -137,6 +137,7 @@ const setSchemaFieldState = (
       )
     }
     if (isStr(runner) && runner) {
+      // @ts-ignore
       shallowCompile(`{{function(){${runner}}}}`, scope)()
     }
   }
@@ -191,8 +192,10 @@ const getUserReactions = (
       if (isFn(reaction)) {
         return reaction(field)
       }
+      // @ts-ignore
       const { when, fulfill, otherwise, target, effects } = reaction
       const run = () => {
+        // @ts-ignore
         const $deps = getDependencies(field, reaction.dependencies)
         const $dependencies = $deps
         const scope = {
@@ -215,11 +218,14 @@ const getUserReactions = (
       }
 
       if (target) {
+        // @ts-ignore
         reaction.effects = effects?.length ? effects : DefaultFieldEffects
       }
+      // @ts-ignore
       if (reaction.effects) {
         autorun.memo(() => {
           untracked(() => {
+            // @ts-ignore
             each(reaction.effects, (type) => {
               if (FieldEffects[type]) {
                 FieldEffects[type](field.address, run)
